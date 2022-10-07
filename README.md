@@ -1,70 +1,38 @@
-## 🧶 Template for data processing and analysis
+# 💽 CSET-HAI 2022 Compute Survey Repository
 
-This is a [template repository](https://github.blog/2019-06-06-generate-new-repositories-with-repository-templates) for working in Python to gather, process, and analyze data.
-To use it in a project, open its repo page on Github.com and click the green "Use this template" button.
-After creating your new repo, replace this top section of `README.md` with project documentation.
+This repository includes all associated materials for the compute survey run by CSET and HAI in June and July of 2022. Specifically, this repository hosts:
 
-As always, discussion, suggestions, and changes are welcome. Just create an issue or PR.
+1. 🙋 SQL scripts used for identifying potential respondents in the population of interest;
+2. ❓ The survey instrument;
+3. 📊 Analytical scripts (in Python and R) for cleaning, visualizing, and analyzing survey responses; and
+4. 📈 Additional scripts and visualizations produced but not included in the paper, which are provided here to give interested readers a more complete view of the data.
 
-The text below and everything else in the repo are template content.
+### Using This Repository
 
-### Getting started
-
-- Clone the project repo
-- Create a new Python 3.7 virtual environment and install requirements:
-
-```bash
-# using conda:
-conda create -n {project-name} python=3.7 --file requirements.txt
-conda activate {project-name}
-
-# or using virtualenv:
-python3.7 -m venv ~/.virtualenvs/{project-name}
-source ~/.virtualenvs/{project-name}/bin/activate
-pip install -r requirements.txt
-```
-
-- Optionally, create an `.env` file in the project root that defines environment variables; they will be accessible from Python via `os.environ[]` after importing `./settings.py`, e.g. with `import settings`  
-- Populate data directories with any data excluded from the project repo:
-
-```bash
-# Requires activated environment
-python data/main.py
-```
-
-- Reproduce any analytic outputs excluded from the project repo:
-
-```bash
-# Requires activated environment
-python analysis/main.py
-```
+We are **not** releasing raw data associated with survey responses, due to anonymity concerns. As a result, this repository primarily functions 1) to offer transparency regarding the analysis methods employed in this research and 2) to provide additional analytical results not included in our final paper. This repository does contain a dataset of synthetically-generated fake response data, which was produced by independently sampling each response from our survey. Scripts can be executed to produce visualizations based on this synthetic data to verify the proper functioning of all code, but the results will be meaningless.
 
 ### Organization
 
+This repository is organized as follows:
+
 ```
-.                       <- Project root
-├── analysis            <- Scripts/notebooks for analysis of final data
-│   ├── figures         <- Figures created during analysis 
-│   ├── tables          <- Tables created during analysis (e.g., of summary statistics or estimates)
-│   └── main.py         <- Entry point for analysis code
-├── data                <- Scripts to download or process data
-│   ├── final           <- Final datasets
-│   │   └── README.md   <- Documentaton for source data; organization, etc.
-│   ├── interim         <- Intermediate transformed data
-│   │   └── README.md   <- Documentaton for interim data; organization, etc.
-│   ├── reference       <- Data dictionaries, user guides, lookup tables, and other references
-│   │   └── README.md   <- Documentaton for source data; organization, etc.
-│   ├── source          <- Original, immutable data dump
-│   │   └── README.md   <- Documentaton for source data; organization, etc.
-│   └── main.py         <- Entry point for data collection and/or processing code
-├── .env                <- Optional environment variables file (NOTE: excluded from Git; create by hand)
-├── main.py             <- Entry point for project code
-├── README.md           <- Top-level project documentation
-├── requirements.txt    <- Python requirements file
-└── settings.py         <- Project settings; will load environment variables from `.env`
+.                             <- Project root
+├── data                      <- Synthetic data and associated CSVs for interpreting results
+|   ├── README.md             <- Documentation explaining the meaning of each column in synthetci_data.csv
+|   ├── synthetic_data.csv    <- Synthetically generated data mimicking the layout of our final, cleaned dataset
+|   └── answer_key.csv        <- CSV file for use in interpreting some responses
+├── scripts                   <- Folder containing all associated code
+|   ├── data_cleaner.py       <- Python script to reformat raw data into a cleaned .csv
+|   ├── targeting             <- SQL scripts used to identify potential respondents
+|   ├── paper                 <- Python and R scripts used for analysis results included in the final paper
+|   └── supplementary         <- Python and R scripts used for additional results not included in the final paper
+├── results                   <- Folder containing outputs of various scripts
+|   ├── memo.txt              <- Question-by-question breakdown of responses
+|   ├── models.txt            <- Outputs of R scripts used to model question responses
+|   └── figures               <- Folder containing visualizations
+|       ├── paper             <- Folder containing TKTK total visualizations included in the final report
+|       └── supplementary     <- Folder containing TKTK additional visualizations not included in the final paper
+├── INSTRUMENT.pdf            <- PDF of the complete survey instrument
+├── README.md                 <- Top-level project documentation (this file)
+└── requirements.txt          <- Python requirements file
 ```
-
-### Collaboration
-
-Questions and suggestions from the broader team are encouraged! Just create an issue.
-
