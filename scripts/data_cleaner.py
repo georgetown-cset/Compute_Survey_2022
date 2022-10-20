@@ -161,9 +161,9 @@ df.to_csv('../../Private/data_cleaned.csv', index = False)
 
 
 # Make a table counting the number of respondents in each (sector, field) combination
-data = np.zeros((3, len(df.columns[15:70])), 'i')
+data = np.zeros((3, len(df.columns[16:71])), 'i')
 for i, s in enumerate(['Academia', 'Industry', 'Government']):
-    for j, f in enumerate(df.columns[15:70]):
+    for j, f in enumerate(df.columns[16:71]):
         data[i,j] = df[df.Sector == s][f].sum()
 
 # Convert this table to a dataframe and save it
@@ -178,7 +178,7 @@ data = pd.DataFrame({'Academia': data[0, :], 'Industry': data[1, :], 'Government
                     'PctAcadDiff': (data[0, :] / np.sum(data, axis=0) - 311/448).round(2),
                     'PctIndDiff': (data[1, :] / np.sum(data, axis=0) - 121/448).round(2),
                     'PctGovDiff': (data[2, :] / np.sum(data, axis=0) - 15/448).round(2)},
-                    index = df.columns[15:70])
+                    index = df.columns[16:71])
 
 # Save the dataframe
 data.to_csv('../data/field_composition.csv')
