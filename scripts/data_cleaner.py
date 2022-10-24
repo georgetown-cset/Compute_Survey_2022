@@ -99,10 +99,13 @@ df['PrioritySimplified'] = df['TopPriority'].apply(lambda x: priorities[x] if x 
 size_dict = {1: 0, 2: 0, 3: 0, 4: 1}
 df['LargeCompany'] = df.apply(lambda x: size_dict[x['company_size']] if x['company_size'] in size_dict and x['Sector'] == 'Industry' else pd.NA, axis=1).astype('Int8')
 
+# While we mostly only want to compare large companies vs. small companies, to plot the demographic breakdown, we still want all the original data, though we should reformat it as with other categorical variables
+cat_reformat('company_size', 'CompanySize')
+
 # Similarly, reformat the `education` column into a categorical binary feature
 edu_dict = {1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:1}
 df['HasPhD'] = df.education.apply(lambda x: edu_dict[x] if x in edu_dict else pd.NA).astype('Int8')
-df.drop(columns = ['company_size', 'education'], inplace=True)
+df.drop(columns = ['education'], inplace=True)
 
 
 # If questions are ordinal, we need to map recorded values one-by-one to their proper ordering
@@ -147,6 +150,10 @@ for i, c in enumerate(['Reject', 'Revise', 'Abandon']):
 for i, c in enumerate(['Data', 'Compute', 'Algorithms', 'Researchers', 'Support']):
     rename_likert(f'past_AI_progress_{i+1}', f'Past{c}')
     rename_likert(f'future_AI_factors_{i+1}', f'Future{c}')
+
+# For the evaluation of compute over the past decade SPECIFICALLY, there are no "1" answers, which means that instead of converting the likert responses from the range
+# [1,5] to the range [0,4], rename_likert() actually converts it from [2,5] to [0,3]——to fix this, just add 1 to this new columns
+df['PastCompute'] += 1
 
 rename_likert('relative_comp_needed', 'NeedChanges')
 rename_likert('relative_comp_access', 'AccessChanges')
