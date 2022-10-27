@@ -8,7 +8,7 @@ answer_key = pd.read_csv('../data/answer_key.csv', index_col='index')
 # Load full DataFrame and remove irrelevant columns
 df = pd.read_csv('../../Private/screened.csv', skiprows=[1])
 df.drop(columns=['StartDate', 'EndDate', 'Status', 'RecordedDate', 'UserLanguage', 'sig_year_1_TEXT',
-                 'comp_year_1_TEXT', 'consent', 'more_thoughts'], inplace=True)
+                 'comp_year_1_TEXT', 'consent'], inplace=True)
 
 
 # Time to painstakingly go through each multi-select column and break each option into a unique column
@@ -191,7 +191,8 @@ data = pd.DataFrame({'Academia': data[0, :], 'Industry': data[1, :], 'Government
 data.to_csv('../data/field_composition.csv')
 
 
-# Finally, generate some synthetic, randomly sampled data to include in the GitHub repo
+# Finally, generate some synthetic, randomly sampled data to include in the GitHub repo (but do NOT include the open text responses)
+df = df.drop(columns = ['more_thoughts'])
 synthetic_data = {}
 for c in df.columns[4:]:
     synthetic_data[c] = df[c].sample(n=30).tolist()
