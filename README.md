@@ -16,23 +16,23 @@ We are **not** releasing raw data associated with survey responses, due to anony
 This repository is organized as follows:
 
 ```
-.                             <- Project root
-├── data                      <- Synthetic data and associated CSVs for interpreting results
-|   ├── README.md             <- Documentation explaining the meaning of each column in synthetci_data.csv
-|   ├── synthetic_data.csv    <- Synthetically generated data mimicking the layout of our final, cleaned dataset
-|   └── answer_key.csv        <- CSV file for use in interpreting some responses
-├── scripts                   <- Folder containing all associated code
-|   ├── data_cleaner.py       <- Python script to reformat raw data into a cleaned .csv
-|   ├── targeting             <- SQL scripts used to identify potential respondents
-|   ├── paper                 <- Python and R scripts used for analysis results included in the final paper
-|   └── supplementary         <- Python and R scripts used for additional results not included in the final paper
-├── results                   <- Folder containing outputs of various scripts
-|   ├── memo.txt              <- Question-by-question breakdown of responses
-|   ├── models.txt            <- Outputs of R scripts used to model question responses
-|   └── figures               <- Folder containing visualizations
-|       ├── paper             <- Folder containing TKTK total visualizations included in the final report
-|       └── supplementary     <- Folder containing TKTK additional visualizations not included in the final paper
-├── INSTRUMENT.pdf            <- PDF of the complete survey instrument
-├── README.md                 <- Top-level project documentation (this file)
-└── requirements.txt          <- Python requirements file
+.                                   <- Project root
+├── data                            <- Synthetic data and associated CSVs for interpreting results
+|   ├── README.md                   <- Documentation explaining the meaning of each column in synthetci_data.csv
+|   ├── synthetic_data.csv          <- Synthetically generated data mimicking the layout of our final, cleaned dataset
+|   ├── field_composition.csv       <- CSV file showing the number of industry, academic, and government respondents in each field and subfield
+|   └── answer_key.csv              <- CSV file for use in interpreting some responses
+├── scripts                         <- Folder containing all associated code
+|   ├── targeting                   <- SQL scripts used to identify potential respondents
+|   ├── data_cleaner.py             <- Python script to reformat raw data into a cleaned .csv
+|   ├── paper_figures.ipynb         <- Jupyter notebook containing code for visualizations included in the final report
+|   ├── supplemental_figures.ipynb  <- Jupyter notebook containing code for supplemental visualizations
+|   └── modeling.R                  <- R scripts used to produce models used to interpret some additional results
+├── results                         <- Folder containing visualizations
+|   ├── figures                     <- Folder containing TKTK total visualizations included in the final report
+|   ├── model_outputs               <- Folder containing results of R models referenced in report text
+|   └── supplemental_figures        <- Folder containing TKTK additional visualizations not included in the final paper
+├── INSTRUMENT.pdf                  <- PDF of the complete survey instrument
+├── README.md                       <- Top-level project documentation (this file)
+└── requirements.txt                <- Python requirements file
 ```
