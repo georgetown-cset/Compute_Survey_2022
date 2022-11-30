@@ -38,8 +38,9 @@ for i in range(1, 10):
 list_reformat('vision_subfield_i', 10, 'CVOther')
 
 # Do the same for robotics subfields but with some work arounds
-for i in range(1, 9):
+for i in range(1, 8):
     list_reformat('robotics_subfield_i', i)
+list_reformat('robotics_subfield_i', 8, 'ContinuousControlRobotics')
 list_reformat('robotics_subfield_i', 9, 'RobotOther')
 
 # Do the same for NLP subfields but with some work arounds
@@ -49,7 +50,8 @@ for i in range(35, 52):
 
 # Next for RL subfields
 for i in range(1, 9):
-    if i == 7: list_reformat('rl_subfield_i', i, 'RLOther')
+    if i == 1: list_reformat('rl_subfield_i', i, 'ContinuousControlRL')
+    elif i == 7: list_reformat('rl_subfield_i', i, 'RLOther')
     else: list_reformat('rl_subfield_i', i)
 
 # And finally for Other subfields
