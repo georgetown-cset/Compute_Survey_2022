@@ -1,0 +1,99 @@
+---
+title: "Supplemental Models"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(mlogit)
+library(dplyr)
+library(MASS)
+library(tidyverse)
+```
+
+## Data Dowload
+
+```{r}
+full_data = read.csv("../../Private/data_cleaned.csv")
+```
+
+## Sector and Subfield vs. GPUs Used in Most Compute-Intensive Project
+
+```{r}
+df <- full_data %>%
+  dplyr::select(CompGPUs, Sector, CV, NLP, Robotics, RL, Other) %>%
+  drop_na() %>%
+  filter(Sector %in% c('Academia', 'Industry')) %>%
+  mutate(CompGPUs = as.factor(CompGPUs))
+
+gpu.orderedmodel <- polr(CompGPUs ~ ., data = df, Hess = T)
+
+output <- coef(summary(gpu.orderedmodel))
+p <- pnorm(abs(output[, 't value']), lower.tail = F) * 2
+output <- cbind(output, "p value" = p)
+ci <- rbind(confint(gpu.orderedmodel), matrix(, nrow = 6, ncol = 2))
+output <- cbind(output, ci)
+
+output
+```
+
+## Sector and Subfield vs. Cost of Compute in Most Compute-Intensive Project
+
+```{r}
+df <- full_data %>%
+  dplyr::select(CompCost, Sector, CV, NLP, Robotics, RL, Other) %>%
+  drop_na() %>%
+  filter(Sector %in% c('Academia', 'Industry')) %>%
+  mutate(CompCost = as.factor(CompCost))
+
+cost.orderedmodel <- polr(CompCost ~ ., data = df, Hess = T)
+
+output <- coef(summary(cost.orderedmodel))
+p <- pnorm(abs(output[, 't value']), lower.tail = F) * 2
+output <- cbind(output, "p value" = p)
+ci <- rbind(confint(cost.orderedmodel), matrix(, nrow = 5, ncol = 2))
+output <- cbind(output, ci)
+
+output
+```
+
+## Sector and Subfield Effects on Concern about Future Contributions
+
+```{r}
+df <- full_data %>%
+  dplyr::select(ContributionConcern, Sector, CV, NLP, Robotics, RL, Other) %>%
+  drop_na() %>%
+  filter(Sector %in% c('Academia', 'Industry')) %>%
+  mutate(ContributionConcern = as.factor(ContributionConcern))
+
+concern.orderedmodel <- polr(ContributionConcern ~ ., data = df, Hess = T)
+
+output <- coef(summary(concern.orderedmodel))
+p <- pnorm(abs(output[, 't value']), lower.tail = F) * 2
+output <- cbind(output, "p value" = p)
+ci <- rbind(confint(concern.orderedmodel), matrix(, nrow = 4, ncol = 2))
+output <- cbind(output, ci)
+
+output
+```
+
+## Subfield and GPU Utilization Effects on Concern about Future Contributions 
+
+```{r}
+df <- full_data %>%
+  filter(Sector == 'Academia') %>%
+  dplyr::select(ContributionConcern, CV, NLP, Robotics, RL, Other, CompGPUs) %>%
+  drop_na() %>%
+  mutate(ContributionConcern = as.factor(ContributionConcern),
+         CompGPUs = as.factor(CompGPUs))
+
+concern.gpus.model <- polr(ContributionConcern ~ ., data = df, Hess = T)
+
+output <- coef(summary(concern.gpus.model))
+p <- pnorm(abs(output[, 't value']), lower.tail = F) * 2
+output <- cbind(output, "p value" = p)
+ci <- rbind(confint(concern.gpus.model), matrix(, nrow = 4, ncol = 2))
+output <- cbind(output, ci)
+
+output
+```
