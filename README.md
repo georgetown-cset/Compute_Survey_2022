@@ -27,10 +27,10 @@ This repository is organized as follows:
 |   ├── data_cleaner.py             <- Python script to reformat raw data into a cleaned .csv
 |   ├── paper_figures.ipynb         <- Jupyter notebook containing code for visualizations included in the final report
 |   ├── supplemental_figures.ipynb  <- Jupyter notebook containing code for supplemental visualizations
-|   └── modeling.R                  <- R scripts used to produce models used to interpret some additional results
+|   ├── modeling.Rmd                <- R markdown file used to produce models used to interpret some additional results
+|   └── modeling.html               <- Outputs including model summaries of modeling.Rmd
 ├── results                         <- Folder containing visualizations
 |   ├── figures                     <- Folder containing TKTK total visualizations included in the final report
-|   ├── model_outputs               <- Folder containing results of R models referenced in report text
 |   └── supplemental_figures        <- Folder containing TKTK additional visualizations not included in the final paper
 ├── INSTRUMENT.pdf                  <- PDF of the complete survey instrument
 ├── README.md                       <- Top-level project documentation (this file)
