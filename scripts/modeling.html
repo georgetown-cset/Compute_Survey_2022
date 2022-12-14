@@ -366,13 +366,17 @@ pre code {
 </div>
 
 
+<p>Reference guide for ordered logit models: <a href="https://stats.oarc.ucla.edu/r/dae/ordinal-logistic-regression/" class="uri">https://stats.oarc.ucla.edu/r/dae/ordinal-logistic-regression/</a>
+Reference guide for multinomial probit models: <a href="https://cran.r-project.org/web/packages/mlogit/vignettes/c6.mprobit.html" class="uri">https://cran.r-project.org/web/packages/mlogit/vignettes/c6.mprobit.html</a></p>
 <div id="data-dowload" class="section level2">
 <h2>Data Dowload</h2>
 <pre class="r"><code>full_data = read.csv(&quot;../../Private/data_cleaned.csv&quot;)</code></pre>
 </div>
-<div id="sector-and-subfield-vs.-gpus-used-in-most-compute-intensive-project" class="section level2">
-<h2>Sector and Subfield vs. GPUs Used in Most Compute-Intensive
-Project</h2>
+<div id="model-1" class="section level2">
+<h2>Model 1</h2>
+<div id="sector-and-subfield-vs.-gpus-used-in-most-compute-intensive-project" class="section level3">
+<h3>Sector and Subfield vs. GPUs Used in Most Compute-Intensive
+Project</h3>
 <pre class="r"><code>df &lt;- full_data %&gt;%
   dplyr::select(CompGPUs, Sector, CV, NLP, Robotics, RL, Other) %&gt;%
   drop_na() %&gt;%
@@ -416,9 +420,12 @@ output</code></pre>
 ## 4|5                   NA
 ## 5|6                   NA</code></pre>
 </div>
-<div id="sector-and-subfield-vs.-cost-of-compute-in-most-compute-intensive-project" class="section level2">
-<h2>Sector and Subfield vs. Cost of Compute in Most Compute-Intensive
-Project</h2>
+</div>
+<div id="model-2" class="section level2">
+<h2>Model 2</h2>
+<div id="sector-and-subfield-vs.-cost-of-compute-in-most-compute-intensive-project" class="section level3">
+<h3>Sector and Subfield vs. Cost of Compute in Most Compute-Intensive
+Project</h3>
 <pre class="r"><code>df &lt;- full_data %&gt;%
   dplyr::select(CompCost, Sector, CV, NLP, Robotics, RL, Other) %&gt;%
   drop_na() %&gt;%
@@ -460,9 +467,12 @@ output</code></pre>
 ## 3|4                   NA
 ## 4|5                   NA</code></pre>
 </div>
-<div id="sector-and-subfield-effects-on-concern-about-future-contributions" class="section level2">
-<h2>Sector and Subfield Effects on Concern about Future
-Contributions</h2>
+</div>
+<div id="model-3" class="section level2">
+<h2>Model 3</h2>
+<div id="sector-and-subfield-effects-on-concern-about-future-contributions" class="section level3">
+<h3>Sector and Subfield Effects on Concern about Future
+Contributions</h3>
 <pre class="r"><code>df &lt;- full_data %&gt;%
   dplyr::select(ContributionConcern, Sector, CV, NLP, Robotics, RL, Other) %&gt;%
   drop_na() %&gt;%
@@ -502,9 +512,12 @@ output</code></pre>
 ## 2|3                    NA
 ## 3|4                    NA</code></pre>
 </div>
-<div id="subfield-and-gpu-utilization-effects-on-concern-about-future-contributions" class="section level2">
-<h2>Subfield and GPU Utilization Effects on Concern about Future
-Contributions</h2>
+</div>
+<div id="model-4" class="section level2">
+<h2>Model 4</h2>
+<div id="subfield-and-gpu-utilization-effects-on-concern-about-future-contributions" class="section level3">
+<h3>Subfield and GPU Utilization Effects on Concern about Future
+Contributions</h3>
 <pre class="r"><code>df &lt;- full_data %&gt;%
   filter(Sector == &#39;Academia&#39;) %&gt;%
   dplyr::select(ContributionConcern, CV, NLP, Robotics, RL, Other, CompGPUs) %&gt;%
@@ -538,6 +551,108 @@ output</code></pre>
 ## 1|2        0.3196480  0.4874379  0.6557717 5.119710e-01           NA         NA
 ## 2|3        1.3070195  0.4929984  2.6511640 8.021488e-03           NA         NA
 ## 3|4        2.8214251  0.5149837  5.4786686 4.285382e-08           NA         NA</code></pre>
+</div>
+</div>
+<div id="model-5" class="section level2">
+<h2>Model 5</h2>
+<div id="gpu-utilization-impact-on-budget-priorities" class="section level3">
+<h3>GPU Utilization Impact on Budget Priorities</h3>
+<pre class="r"><code>df &lt;- full_data %&gt;%
+  filter(PrioritySimplified != &#39;&#39;, CompGPUs != &#39;&#39;) %&gt;%
+  mutate(Priority = as.factor(PrioritySimplified)) %&gt;%
+  dplyr::select(Priority, CompGPUs) %&gt;%
+  dfidx(choice = &#39;Priority&#39;, shape = &#39;wide&#39;)
+
+gpu.probit &lt;- mlogit(Priority ~ 1 | CompGPUs, data = df, reflevel = &#39;Talent&#39;, alt.subset = c(&#39;Compute&#39;, &#39;Talent&#39;, &#39;Data&#39;), probit = T)
+summary(gpu.probit)</code></pre>
+<pre><code>## 
+## Call:
+## mlogit(formula = Priority ~ 1 | CompGPUs, data = df, alt.subset = c(&quot;Compute&quot;, 
+##     &quot;Talent&quot;, &quot;Data&quot;), reflevel = &quot;Talent&quot;, probit = T)
+## 
+## Frequencies of alternatives:choice
+##  Talent Compute    Data 
+## 0.54232 0.23511 0.22257 
+## 
+## bfgs method
+## 23 iterations, 0h:0m:6s 
+## g&#39;(-H)^-1g = 3.83E-07 
+## gradient close to zero 
+## 
+## Coefficients :
+##                      Estimate Std. Error z-value Pr(&gt;|z|)  
+## (Intercept):Compute -1.058559   0.619410 -1.7090  0.08745 .
+## (Intercept):Data    -0.496937  14.287424 -0.0348  0.97225  
+## CompGPUs:Compute     0.137072   0.062031  2.2097  0.02712 *
+## CompGPUs:Data       -0.047957   1.476140 -0.0325  0.97408  
+## Compute.Data        -0.301395   8.700924 -0.0346  0.97237  
+## Data.Data            0.819028  23.015545  0.0356  0.97161  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Log-Likelihood: -317.58
+## McFadden R^2:  0.010993 
+## Likelihood ratio test : chisq = 7.0598 (p.value = 0.13276)</code></pre>
+</div>
+</div>
+<div id="model-6" class="section level2">
+<h2>Model 6</h2>
+<div id="gpu-utilization-sector-and-subfield-impact-on-budget-priorities" class="section level3">
+<h3>GPU Utilization, Sector, and Subfield Impact on Budget
+Priorities</h3>
+<pre class="r"><code>df &lt;- full_data %&gt;%
+  filter(PrioritySimplified != &#39;&#39;, CompGPUs != &#39;&#39;, Sector %in% c(&#39;Industry&#39;, &#39;Academia&#39;), 
+         CV | Robotics | NLP | RL | Other &gt; 0) %&gt;%
+  mutate(Priority = as.factor(PrioritySimplified), 
+         Industry = .$Sector == &#39;Industry&#39;) %&gt;%
+  dplyr::select(Priority, CompGPUs, Industry, CV, Robotics, NLP, RL, Other) %&gt;%
+  dfidx(choice = &#39;Priority&#39;, shape = &#39;wide&#39;)
+
+full.probit &lt;- mlogit(Priority ~ 1 | CompGPUs + Industry + CV + Robotics + NLP + RL + Other, 
+                      data = df, reflevel = &#39;Talent&#39;, alt.subset = c(&#39;Compute&#39;, &#39;Talent&#39;, &#39;Data&#39;), probit = T)
+summary(full.probit)</code></pre>
+<pre><code>## 
+## Call:
+## mlogit(formula = Priority ~ 1 | CompGPUs + Industry + CV + Robotics + 
+##     NLP + RL + Other, data = df, alt.subset = c(&quot;Compute&quot;, &quot;Talent&quot;, 
+##     &quot;Data&quot;), reflevel = &quot;Talent&quot;, probit = T)
+## 
+## Frequencies of alternatives:choice
+##  Talent Compute    Data 
+## 0.55219 0.23569 0.21212 
+## 
+## bfgs method
+## 36 iterations, 0h:0m:19s 
+## g&#39;(-H)^-1g = 0.0354 
+## successive function values within tolerance limits 
+## 
+## Coefficients :
+##                         Estimate  Std. Error z-value  Pr(&gt;|z|)    
+## (Intercept):Compute  -5.0107e-01  2.5289e-01 -1.9814   0.04755 *  
+## (Intercept):Data     -2.0065e-01  2.7125e-01 -0.7397   0.45946    
+## CompGPUs:Compute      8.1792e-02  5.7876e-02  1.4132   0.15759    
+## CompGPUs:Data         4.5841e-02  5.5287e-02  0.8291   0.40702    
+## IndustryTRUE:Compute  7.6816e-02  1.9231e-01  0.3994   0.68956    
+## IndustryTRUE:Data     1.6127e-01  1.4916e-01  1.0812   0.27962    
+## CV:Compute            3.7179e-01  1.9780e-01  1.8797   0.06016 .  
+## CV:Data               1.7721e-01  2.0406e-01  0.8684   0.38517    
+## Robotics:Compute     -5.4247e-01  2.9346e-01 -1.8485   0.06453 .  
+## Robotics:Data        -3.4246e-01  2.6441e-01 -1.2952   0.19526    
+## NLP:Compute          -6.3080e-03  1.9928e-01 -0.0317   0.97475    
+## NLP:Data              2.3117e-02  2.1694e-01  0.1066   0.91514    
+## RL:Compute            3.8611e-02  2.5494e-01  0.1514   0.87962    
+## RL:Data               2.6680e-02  2.6397e-01  0.1011   0.91949    
+## Other:Compute        -2.7355e-01  1.8843e-01 -1.4517   0.14658    
+## Other:Data           -2.3044e-01  1.5900e-01 -1.4494   0.14724    
+## Compute.Data          7.3919e-01  1.8230e-01  4.0549 5.016e-05 ***
+## Data.Data             9.0117e-05  3.5226e-02  0.0026   0.99796    
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Log-Likelihood: -271.5
+## McFadden R^2:  0.083525 
+## Likelihood ratio test : chisq = 49.488 (p.value = 2.7647e-05)</code></pre>
+</div>
 </div>
 
 

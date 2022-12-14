@@ -11,13 +11,17 @@ library(MASS)
 library(tidyverse)
 ```
 
+Reference guide for ordered logit models: https://stats.oarc.ucla.edu/r/dae/ordinal-logistic-regression/
+Reference guide for multinomial probit models: https://cran.r-project.org/web/packages/mlogit/vignettes/c6.mprobit.html 
+
 ## Data Dowload
 
 ```{r}
 full_data = read.csv("../../Private/data_cleaned.csv")
 ```
 
-## Sector and Subfield vs. GPUs Used in Most Compute-Intensive Project
+## Model 1
+### Sector and Subfield vs. GPUs Used in Most Compute-Intensive Project
 
 ```{r}
 df <- full_data %>%
@@ -37,7 +41,8 @@ output <- cbind(output, ci)
 output
 ```
 
-## Sector and Subfield vs. Cost of Compute in Most Compute-Intensive Project
+## Model 2
+### Sector and Subfield vs. Cost of Compute in Most Compute-Intensive Project
 
 ```{r}
 df <- full_data %>%
@@ -57,7 +62,8 @@ output <- cbind(output, ci)
 output
 ```
 
-## Sector and Subfield Effects on Concern about Future Contributions
+## Model 3
+### Sector and Subfield Effects on Concern about Future Contributions
 
 ```{r}
 df <- full_data %>%
@@ -77,7 +83,8 @@ output <- cbind(output, ci)
 output
 ```
 
-## Subfield and GPU Utilization Effects on Concern about Future Contributions 
+## Model 4
+### Subfield and GPU Utilization Effects on Concern about Future Contributions 
 
 ```{r}
 df <- full_data %>%
@@ -97,3 +104,35 @@ output <- cbind(output, ci)
 
 output
 ```
+
+## Model 5
+### GPU Utilization Impact on Budget Priorities
+
+```{r}
+df <- full_data %>%
+  filter(PrioritySimplified != '', CompGPUs != '') %>%
+  mutate(Priority = as.factor(PrioritySimplified)) %>%
+  dplyr::select(Priority, CompGPUs) %>%
+  dfidx(choice = 'Priority', shape = 'wide')
+
+gpu.probit <- mlogit(Priority ~ 1 | CompGPUs, data = df, reflevel = 'Talent', alt.subset = c('Compute', 'Talent', 'Data'), probit = T)
+summary(gpu.probit)
+```
+
+## Model 6
+### GPU Utilization, Sector, and Subfield Impact on Budget Priorities
+
+```{r}
+df <- full_data %>%
+  filter(PrioritySimplified != '', CompGPUs != '', Sector %in% c('Industry', 'Academia'), 
+         CV | Robotics | NLP | RL | Other > 0) %>%
+  mutate(Priority = as.factor(PrioritySimplified), 
+         Industry = .$Sector == 'Industry') %>%
+  dplyr::select(Priority, CompGPUs, Industry, CV, Robotics, NLP, RL, Other) %>%
+  dfidx(choice = 'Priority', shape = 'wide')
+
+full.probit <- mlogit(Priority ~ 1 | CompGPUs + Industry + CV + Robotics + NLP + RL + Other, 
+                      data = df, reflevel = 'Talent', alt.subset = c('Compute', 'Talent', 'Data'), probit = T)
+summary(full.probit)
+```
+
