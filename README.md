@@ -25,7 +25,7 @@ This repository is organized as follows:
 ├── scripts                         <- Folder containing all associated code
 |   ├── targeting                   <- SQL scripts used to identify potential respondents
 |   ├── data_cleaner.py             <- Python script to reformat raw data into a cleaned .csv
-|   ├── paper_figures.ipynb         <- Jupyter notebook containing code for visualizations included in the final report
+|   ├── paper_figures.ipynb         <- Jupyter notebook containing code for visualizations (and hypothesis testing) included in the final report
 |   ├── supplemental_figures.ipynb  <- Jupyter notebook containing code for supplemental visualizations
 |   ├── modeling.Rmd                <- R markdown file used to produce models used to interpret some additional results
 |   └── modeling.html               <- Outputs including model summaries of modeling.Rmd
