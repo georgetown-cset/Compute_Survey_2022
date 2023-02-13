@@ -81,6 +81,7 @@ CloudUser                 <- 0 or 1; whether the respondent used cloud compute i
 OnPremise                 <- 0 or 1; whether the respondent used on-premise compute in the previous year (0 if question skipped)
 UsedFree                  <- 0 or 1; whether the respondent used free compute in the previous year (0 if question skipped)
 UsedPersonal              <- 0 or 1; whether the respondent used personal funds to pay for compute in the previous year (0 if skipped)
+UsedGrants 		  <— 0 or 1; whether the respondent used grants to pay for compute in the previous year (0 if skipped) 
 EmployerPaid              <- 0 or 1; whether the respondent's employer paid for compute in the previous year (0 if skipped)
 WantsData                 <- 0 or 1; whether the respondent indicated that NAIRR-provided data resources would be useful (0 if skipped)
 WantsCompute              <- 0 or 1; whether the respondent indicated that NAIRR-provided compute resources would be useful (0 if skipped)
