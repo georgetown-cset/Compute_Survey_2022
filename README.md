@@ -20,18 +20,17 @@ This repository is organized as follows:
 ├── data                            <- Synthetic data and associated CSVs for interpreting results
 |   ├── README.md                   <- Documentation explaining the meaning of each column in synthetci_data.csv
 |   ├── synthetic_data.csv          <- Synthetically generated data mimicking the layout of our final, cleaned dataset
-|   ├── field_composition.csv       <- CSV file showing the number of industry, academic, and government respondents in each field and subfield
-|   └── answer_key.csv              <- CSV file for use in interpreting some responses
+|   └── field_composition.csv       <- CSV file showing the number of industry, academic, and government respondents in each field and subfield
 ├── scripts                         <- Folder containing all associated code
 |   ├── targeting                   <- SQL scripts used to identify potential respondents
-|   ├── data_cleaner.py             <- Python script to reformat raw data into a cleaned .csv
-|   ├── paper_figures.ipynb         <- Jupyter notebook containing code for visualizations (and hypothesis testing) included in the final report
-|   ├── supplemental_figures.ipynb  <- Jupyter notebook containing code for supplemental visualizations
+|   ├── codebook.ipynb              <- Jupyter notebook containing primary Python code for all preprocessing, data visualization, and analysis
 |   ├── modeling.Rmd                <- R markdown file used to produce models used to interpret some additional results
 |   └── modeling.html               <- Outputs including model summaries of modeling.Rmd
 ├── results                         <- Folder containing visualizations
-|   ├── figures                     <- Folder containing TKTK total visualizations included in the final report
-|   └── supplemental_figures        <- Folder containing TKTK additional visualizations not included in the final paper
+|   ├── figures                     <- Folder containing 16 total visualizations included in the final report
+|   └── supplemental_figures        <- Folder containing 26 additional visualizations not included in the final paper
+|       ├── with_snowball           <- Folder for all paper visualizations (except Appendix C) reproduced including snowball responses
+|       └── no_partial_responses    <- Folder for all paper visualizations (except Appendix C) reproduced using only complete responses
 ├── INSTRUMENT.pdf                  <- PDF of the complete survey instrument
 ├── README.md                       <- Top-level project documentation (this file)
 └── requirements.txt                <- Python requirements file
