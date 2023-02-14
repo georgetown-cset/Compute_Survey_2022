@@ -17,7 +17,7 @@ Reference guide for multinomial probit models: https://cran.r-project.org/web/pa
 ## Data Dowload
 
 ```{r}
-full_data = read.csv("../../Private/data_cleaned.csv")
+full_data = read.csv("../../Private/no_snowball_cleaned.csv")
 ```
 
 ## Model 1
@@ -26,6 +26,7 @@ full_data = read.csv("../../Private/data_cleaned.csv")
 ```{r}
 df <- full_data %>%
   dplyr::select(CompGPUs, Sector, CV, NLP, Robotics, RL, Other) %>%
+  mutate_at(c('CV','NLP', 'Robotics', 'RL', 'Other'), ~replace_na(., 0)) %>%
   drop_na() %>%
   filter(Sector %in% c('Academia', 'Industry')) %>%
   mutate(CompGPUs = as.factor(CompGPUs))
@@ -47,6 +48,7 @@ output
 ```{r}
 df <- full_data %>%
   dplyr::select(CompCost, Sector, CV, NLP, Robotics, RL, Other) %>%
+  mutate_at(c('CV','NLP', 'Robotics', 'RL', 'Other'), ~replace_na(., 0)) %>%
   drop_na() %>%
   filter(Sector %in% c('Academia', 'Industry')) %>%
   mutate(CompCost = as.factor(CompCost))
@@ -68,6 +70,7 @@ output
 ```{r}
 df <- full_data %>%
   dplyr::select(ContributionConcern, Sector, CV, NLP, Robotics, RL, Other) %>%
+  mutate_at(c('CV','NLP', 'Robotics', 'RL', 'Other'), ~replace_na(., 0)) %>%
   drop_na() %>%
   filter(Sector %in% c('Academia', 'Industry')) %>%
   mutate(ContributionConcern = as.factor(ContributionConcern))
@@ -90,6 +93,7 @@ output
 df <- full_data %>%
   filter(Sector == 'Academia') %>%
   dplyr::select(ContributionConcern, CV, NLP, Robotics, RL, Other, CompGPUs) %>%
+  mutate_at(c('CV','NLP', 'Robotics', 'RL', 'Other'), ~replace_na(., 0)) %>%
   drop_na() %>%
   mutate(ContributionConcern = as.factor(ContributionConcern),
          CompGPUs = as.factor(CompGPUs))

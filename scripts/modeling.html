@@ -370,7 +370,7 @@ pre code {
 Reference guide for multinomial probit models: <a href="https://cran.r-project.org/web/packages/mlogit/vignettes/c6.mprobit.html" class="uri">https://cran.r-project.org/web/packages/mlogit/vignettes/c6.mprobit.html</a></p>
 <div id="data-dowload" class="section level2">
 <h2>Data Dowload</h2>
-<pre class="r"><code>full_data = read.csv(&quot;../../Private/data_cleaned.csv&quot;)</code></pre>
+<pre class="r"><code>full_data = read.csv(&quot;../../Private/no_snowball_cleaned.csv&quot;)</code></pre>
 </div>
 <div id="model-1" class="section level2">
 <h2>Model 1</h2>
@@ -379,6 +379,7 @@ Reference guide for multinomial probit models: <a href="https://cran.r-project.o
 Project</h3>
 <pre class="r"><code>df &lt;- full_data %&gt;%
   dplyr::select(CompGPUs, Sector, CV, NLP, Robotics, RL, Other) %&gt;%
+  mutate_at(c(&#39;CV&#39;,&#39;NLP&#39;, &#39;Robotics&#39;, &#39;RL&#39;, &#39;Other&#39;), ~replace_na(., 0)) %&gt;%
   drop_na() %&gt;%
   filter(Sector %in% c(&#39;Academia&#39;, &#39;Industry&#39;)) %&gt;%
   mutate(CompGPUs = as.factor(CompGPUs))
@@ -393,26 +394,26 @@ ci &lt;- rbind(confint(gpu.orderedmodel), matrix(, nrow = 6, ncol = 2))</code></
 <pre class="r"><code>output &lt;- cbind(output, ci)
 
 output</code></pre>
-<pre><code>##                      Value Std. Error    t value      p value       2.5 %
-## SectorIndustry  0.28822434  0.2429225  1.1864868 2.354301e-01 -0.18650904
-## CV              1.12259471  0.2362935  4.7508498 2.025636e-06  0.66302802
-## NLP             0.41618288  0.2359059  1.7641904 7.769993e-02 -0.04517769
-## Robotics       -0.07676155  0.2892542 -0.2653775 7.907187e-01 -0.64423399
-## RL              0.21723345  0.2648896  0.8200905 4.121645e-01 -0.30129254
-## Other          -0.29460440  0.2413546 -1.2206290 2.222265e-01 -0.76825187
-## 0|1            -1.91282238  0.2957823 -6.4669937 9.997183e-11          NA
-## 1|2            -0.78718423  0.2622797 -3.0013155 2.688159e-03          NA
-## 2|3             0.38044826  0.2570261  1.4801934 1.388217e-01          NA
-## 3|4             1.72792329  0.2725531  6.3397672 2.301127e-10          NA
-## 4|5             2.93456985  0.3119023  9.4086191 5.026977e-21          NA
-## 5|6             4.68145414  0.4849597  9.6532854 4.760562e-22          NA
+<pre><code>##                     Value Std. Error    t value      p value       2.5 %
+## SectorIndustry  0.2036257  0.2454894  0.8294686 4.068393e-01 -0.27648751
+## CV              1.0425026  0.2405733  4.3334096 1.468176e-05  0.57453643
+## NLP             0.5224867  0.2432013  2.1483716 3.168424e-02  0.04712946
+## Robotics       -0.2237164  0.2952245 -0.7577840 4.485803e-01 -0.80330672
+## RL              0.2659574  0.2726977  0.9752826 3.294201e-01 -0.26770878
+## Other          -0.3559797  0.2488648 -1.4304140 1.525982e-01 -0.84455525
+## 0|1            -1.9481123  0.3065765 -6.3544076 2.092313e-10          NA
+## 1|2            -0.9012550  0.2735949 -3.2941218 9.872972e-04          NA
+## 2|3             0.2966759  0.2664047  1.1136289 2.654384e-01          NA
+## 3|4             1.6358042  0.2804733  5.8322988 5.466889e-09          NA
+## 4|5             2.8449139  0.3192029  8.9125553 4.986969e-19          NA
+## 5|6             4.5587737  0.4883587  9.3348885 1.010976e-20          NA
 ##                   97.5 %
-## SectorIndustry 0.7667433
-## CV             1.5902128
-## NLP            0.8805221
-## Robotics       0.4910600
-## RL             0.7384331
-## Other          0.1787698
+## SectorIndustry 0.6868566
+## CV             1.5185480
+## NLP            1.0015203
+## Robotics       0.3555440
+## RL             0.8026708
+## Other          0.1319996
 ## 0|1                   NA
 ## 1|2                   NA
 ## 2|3                   NA
@@ -428,6 +429,7 @@ output</code></pre>
 Project</h3>
 <pre class="r"><code>df &lt;- full_data %&gt;%
   dplyr::select(CompCost, Sector, CV, NLP, Robotics, RL, Other) %&gt;%
+  mutate_at(c(&#39;CV&#39;,&#39;NLP&#39;, &#39;Robotics&#39;, &#39;RL&#39;, &#39;Other&#39;), ~replace_na(., 0)) %&gt;%
   drop_na() %&gt;%
   filter(Sector %in% c(&#39;Academia&#39;, &#39;Industry&#39;)) %&gt;%
   mutate(CompCost = as.factor(CompCost))
@@ -443,24 +445,24 @@ ci &lt;- rbind(confint(cost.orderedmodel), matrix(, nrow = 5, ncol = 2))</code><
 
 output</code></pre>
 <pre><code>##                     Value Std. Error    t value      p value      2.5 %
-## SectorIndustry  1.7771993  0.3205749  5.5437879 2.959974e-08  1.1571137
-## CV              0.7326637  0.2589770  2.8290680 4.668379e-03  0.2280233
-## NLP            -0.2862314  0.2645565 -1.0819291 2.792840e-01 -0.8068369
-## Robotics       -0.2995327  0.3088833 -0.9697276 3.321823e-01 -0.9072796
-## RL              0.2434601  0.2931543  0.8304847 4.062648e-01 -0.3307672
-## Other          -0.2691782  0.2739506 -0.9825794 3.258145e-01 -0.8063145
-## 0|1            -2.0551506  0.3282067 -6.2617569 3.806641e-10         NA
-## 1|2            -1.0728129  0.2959149 -3.6254105 2.885028e-04         NA
-## 2|3             0.4821007  0.2896453  1.6644519 9.602215e-02         NA
-## 3|4             2.2657004  0.3243192  6.9860191 2.827957e-12         NA
-## 4|5             4.0684337  0.4483907  9.0734122 1.153470e-19         NA
+## SectorIndustry  1.6806304  0.3277129  5.1283622 2.922736e-07  1.0469735
+## CV              0.7700326  0.2698837  2.8532014 4.328118e-03  0.2445696
+## NLP            -0.1979389  0.2794869 -0.7082224 4.788072e-01 -0.7478931
+## Robotics       -0.4474827  0.3192944 -1.4014737 1.610725e-01 -1.0763060
+## RL              0.2076638  0.3055245  0.6796961 4.966969e-01 -0.3909165
+## Other          -0.4047557  0.2897930 -1.3967060 1.625020e-01 -0.9736408
+## 0|1            -2.1060065  0.3471582 -6.0664170 1.307952e-09         NA
+## 1|2            -1.1325690  0.3118151 -3.6321811 2.810358e-04         NA
+## 2|3             0.4034531  0.3035461  1.3291327 1.838042e-01         NA
+## 3|4             2.2376291  0.3396419  6.5882000 4.451906e-11         NA
+## 4|5             3.9306904  0.4564473  8.6114878 7.211844e-18         NA
 ##                   97.5 %
-## SectorIndustry 2.4161864
-## CV             1.2444322
-## NLP            0.2315009
-## Robotics       0.3054733
-## RL             0.8201326
-## Other          0.2688426
+## SectorIndustry 2.3342067
+## CV             1.3039183
+## NLP            0.3491815
+## Robotics       0.1775459
+## RL             0.8086075
+## Other          0.1638709
 ## 0|1                   NA
 ## 1|2                   NA
 ## 2|3                   NA
@@ -475,6 +477,7 @@ output</code></pre>
 Contributions</h3>
 <pre class="r"><code>df &lt;- full_data %&gt;%
   dplyr::select(ContributionConcern, Sector, CV, NLP, Robotics, RL, Other) %&gt;%
+  mutate_at(c(&#39;CV&#39;,&#39;NLP&#39;, &#39;Robotics&#39;, &#39;RL&#39;, &#39;Other&#39;), ~replace_na(., 0)) %&gt;%
   drop_na() %&gt;%
   filter(Sector %in% c(&#39;Academia&#39;, &#39;Industry&#39;)) %&gt;%
   mutate(ContributionConcern = as.factor(ContributionConcern))
@@ -490,23 +493,23 @@ ci &lt;- rbind(confint(concern.orderedmodel), matrix(, nrow = 4, ncol = 2))</cod
 
 output</code></pre>
 <pre><code>##                      Value Std. Error    t value      p value      2.5 %
-## SectorIndustry -0.49179188  0.1988133 -2.4736365 1.337457e-02 -0.8830031
-## CV              0.29896210  0.2042149  1.4639587 1.432052e-01 -0.1010348
-## NLP             0.58980792  0.2088221  2.8244514 4.736163e-03  0.1814699
-## Robotics       -0.96627423  0.2606248 -3.7075293 2.092912e-04 -1.4804987
-## RL              0.03592505  0.2355021  0.1525467 8.787558e-01 -0.4260488
-## Other          -0.55756815  0.2100819 -2.6540517 7.953164e-03 -0.9708716
-## 0|1            -1.58781540  0.2395151 -6.6292913 3.373024e-11         NA
-## 1|2            -0.59738599  0.2271958 -2.6293882 8.553865e-03         NA
-## 2|3             0.26786437  0.2260981  1.1847263 2.361257e-01         NA
-## 3|4             1.67439062  0.2446198  6.8448696 7.654555e-12         NA
+## SectorIndustry -0.57968438  0.2053086 -2.8234783 4.750564e-03 -0.9839450
+## CV              0.25033668  0.2106032  1.1886649 2.345715e-01 -0.1623148
+## NLP             0.59837257  0.2164098  2.7649975 5.692323e-03  0.1752179
+## Robotics       -1.13616425  0.2695986 -4.2142813 2.505748e-05 -1.6686151
+## RL              0.02552662  0.2418526  0.1055462 9.159424e-01 -0.4489549
+## Other          -0.71885578  0.2176343 -3.3030439 9.564143e-04 -1.1476026
+## 0|1            -1.79521545  0.2526408 -7.1058004 1.196272e-12         NA
+## 1|2            -0.77263918  0.2376836 -3.2507041 1.151196e-03         NA
+## 2|3             0.09613699  0.2351119  0.4088989 6.826139e-01         NA
+## 3|4             1.56947729  0.2531238  6.2004328 5.630811e-10         NA
 ##                    97.5 %
-## SectorIndustry -0.1030165
-## CV              0.7001901
-## NLP             1.0007711
-## Robotics       -0.4574906
-## RL              0.4982949
-## Other          -0.1466247
+## SectorIndustry -0.1784620
+## CV              0.6640138
+## NLP             1.0243402
+## Robotics       -0.6103461
+## RL              0.5003296
+## Other          -0.2936768
 ## 0|1                    NA
 ## 1|2                    NA
 ## 2|3                    NA
@@ -521,6 +524,7 @@ Contributions</h3>
 <pre class="r"><code>df &lt;- full_data %&gt;%
   filter(Sector == &#39;Academia&#39;) %&gt;%
   dplyr::select(ContributionConcern, CV, NLP, Robotics, RL, Other, CompGPUs) %&gt;%
+  mutate_at(c(&#39;CV&#39;,&#39;NLP&#39;, &#39;Robotics&#39;, &#39;RL&#39;, &#39;Other&#39;), ~replace_na(., 0)) %&gt;%
   drop_na() %&gt;%
   mutate(ContributionConcern = as.factor(ContributionConcern),
          CompGPUs = as.factor(CompGPUs))
@@ -535,22 +539,22 @@ ci &lt;- rbind(confint(concern.gpus.model), matrix(, nrow = 4, ncol = 2))</code>
 <pre class="r"><code>output &lt;- cbind(output, ci)
 
 output</code></pre>
-<pre><code>##                Value Std. Error    t value      p value        2.5 %     97.5 %
-## CV         0.5809710  0.2924377  1.9866485 4.696137e-02  0.009598987  1.1578252
-## NLP        0.3414965  0.2953787  1.1561310 2.476276e-01 -0.236050248  0.9238087
-## Robotics  -0.7839356  0.3299918 -2.3756210 1.751945e-02 -1.434733663 -0.1389108
-## RL         0.2531949  0.2977823  0.8502686 3.951758e-01 -0.330139891  0.8392997
-## Other     -0.4404479  0.2900799 -1.5183672 1.289218e-01 -1.011002018  0.1278492
-## CompGPUs1  0.5517792  0.5010238  1.1013033 2.707647e-01 -0.426069134  1.5451769
-## CompGPUs2  0.8414996  0.4735240  1.7771001 7.555178e-02 -0.079654043  1.7838537
-## CompGPUs3  0.8379061  0.4693808  1.7851306 7.424013e-02 -0.075692029  1.7715839
-## CompGPUs4  1.1584280  0.5111726  2.2662168 2.343811e-02  0.163408910  2.1737329
-## CompGPUs5  2.1850457  0.6161448  3.5463183 3.906541e-04  0.990879128  3.4159500
-## CompGPUs6  2.0847820  1.6760064  1.2438986 2.135369e-01 -1.013600964  5.6912567
-## 0|1       -0.7186839  0.4888314 -1.4702079 1.415054e-01           NA         NA
-## 1|2        0.3196480  0.4874379  0.6557717 5.119710e-01           NA         NA
-## 2|3        1.3070195  0.4929984  2.6511640 8.021488e-03           NA         NA
-## 3|4        2.8214251  0.5149837  5.4786686 4.285382e-08           NA         NA</code></pre>
+<pre><code>##                Value Std. Error    t value      p value       2.5 %     97.5 %
+## CV         0.5190565  0.3025820  1.7154242 8.626749e-02 -0.07255189  1.1155588
+## NLP        0.3512010  0.3060222  1.1476325 2.511203e-01 -0.24722647  0.9545862
+## Robotics  -0.9574123  0.3445316 -2.7788811 5.454649e-03 -1.63751349 -0.2845587
+## RL         0.2920860  0.3068633  0.9518441 3.411761e-01 -0.30872274  0.8964848
+## Other     -0.7203469  0.3048620 -2.3628625 1.813440e-02 -1.32138798 -0.1243712
+## CompGPUs1  0.6523096  0.5334578  1.2227950 2.214071e-01 -0.38831118  1.7110183
+## CompGPUs2  0.9409257  0.4973521  1.8918703 5.850827e-02 -0.02501704  1.9325410
+## CompGPUs3  0.8679860  0.4897013  1.7724804 7.631484e-02 -0.08378022  1.8438464
+## CompGPUs4  1.1120776  0.5324045  2.0887833 3.672724e-02  0.07692546  2.1711541
+## CompGPUs5  2.0290603  0.6339498  3.2006640 1.371113e-03  0.79973103  3.2952737
+## CompGPUs6  2.0582491  1.7579051  1.1708533 2.416577e-01 -1.14884628  5.7586412
+## 0|1       -0.9514183  0.5103116 -1.8643868 6.226740e-02          NA         NA
+## 1|2        0.1432897  0.5064164  0.2829484 7.772164e-01          NA         NA
+## 2|3        1.1073645  0.5105174  2.1691023 3.007492e-02          NA         NA
+## 3|4        2.6749846  0.5304576  5.0427868 4.588004e-07          NA         NA</code></pre>
 </div>
 </div>
 <div id="model-5" class="section level2">
@@ -572,27 +576,25 @@ summary(gpu.probit)</code></pre>
 ## 
 ## Frequencies of alternatives:choice
 ##  Talent Compute    Data 
-## 0.54232 0.23511 0.22257 
+## 0.54305 0.23510 0.22185 
 ## 
 ## bfgs method
-## 23 iterations, 0h:0m:6s 
-## g&#39;(-H)^-1g = 3.83E-07 
-## gradient close to zero 
+## 27 iterations, 0h:0m:9s 
+## g&#39;(-H)^-1g = 0.148 
+## last step couldn&#39;t find higher value 
 ## 
 ## Coefficients :
-##                      Estimate Std. Error z-value Pr(&gt;|z|)  
-## (Intercept):Compute -1.058559   0.619410 -1.7090  0.08745 .
-## (Intercept):Data    -0.496937  14.287424 -0.0348  0.97225  
-## CompGPUs:Compute     0.137072   0.062031  2.2097  0.02712 *
-## CompGPUs:Data       -0.047957   1.476140 -0.0325  0.97408  
-## Compute.Data        -0.301395   8.700924 -0.0346  0.97237  
-## Data.Data            0.819028  23.015545  0.0356  0.97161  
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+##                       Estimate Std. Error z-value Pr(&gt;|z|)
+## (Intercept):Compute -0.3579327  0.3178423 -1.1261   0.2601
+## (Intercept):Data    -0.7505241  2.1596456 -0.3475   0.7282
+## CompGPUs:Compute     0.0836867  0.0742929  1.1264   0.2600
+## CompGPUs:Data        0.0064324  0.3084312  0.0209   0.9834
+## Compute.Data         1.6974676  3.2646107  0.5200   0.6031
+## Data.Data            0.4994202  2.3703042  0.2107   0.8331
 ## 
-## Log-Likelihood: -317.58
-## McFadden R^2:  0.010993 
-## Likelihood ratio test : chisq = 7.0598 (p.value = 0.13276)</code></pre>
+## Log-Likelihood: -300.58
+## McFadden R^2:  0.010607 
+## Likelihood ratio test : chisq = 6.4449 (p.value = 0.1683)</code></pre>
 </div>
 </div>
 <div id="model-6" class="section level2">
@@ -619,39 +621,39 @@ summary(full.probit)</code></pre>
 ## 
 ## Frequencies of alternatives:choice
 ##  Talent Compute    Data 
-## 0.55219 0.23569 0.21212 
+## 0.54676 0.23741 0.21583 
 ## 
 ## bfgs method
-## 36 iterations, 0h:0m:19s 
-## g&#39;(-H)^-1g = 0.0354 
-## successive function values within tolerance limits 
+## 71 iterations, 0h:0m:22s 
+## g&#39;(-H)^-1g = 6.72E-07 
+## gradient close to zero 
 ## 
 ## Coefficients :
-##                         Estimate  Std. Error z-value  Pr(&gt;|z|)    
-## (Intercept):Compute  -5.0107e-01  2.5289e-01 -1.9814   0.04755 *  
-## (Intercept):Data     -2.0065e-01  2.7125e-01 -0.7397   0.45946    
-## CompGPUs:Compute      8.1792e-02  5.7876e-02  1.4132   0.15759    
-## CompGPUs:Data         4.5841e-02  5.5287e-02  0.8291   0.40702    
-## IndustryTRUE:Compute  7.6816e-02  1.9231e-01  0.3994   0.68956    
-## IndustryTRUE:Data     1.6127e-01  1.4916e-01  1.0812   0.27962    
-## CV:Compute            3.7179e-01  1.9780e-01  1.8797   0.06016 .  
-## CV:Data               1.7721e-01  2.0406e-01  0.8684   0.38517    
-## Robotics:Compute     -5.4247e-01  2.9346e-01 -1.8485   0.06453 .  
-## Robotics:Data        -3.4246e-01  2.6441e-01 -1.2952   0.19526    
-## NLP:Compute          -6.3080e-03  1.9928e-01 -0.0317   0.97475    
-## NLP:Data              2.3117e-02  2.1694e-01  0.1066   0.91514    
-## RL:Compute            3.8611e-02  2.5494e-01  0.1514   0.87962    
-## RL:Data               2.6680e-02  2.6397e-01  0.1011   0.91949    
-## Other:Compute        -2.7355e-01  1.8843e-01 -1.4517   0.14658    
-## Other:Data           -2.3044e-01  1.5900e-01 -1.4494   0.14724    
-## Compute.Data          7.3919e-01  1.8230e-01  4.0549 5.016e-05 ***
-## Data.Data             9.0117e-05  3.5226e-02  0.0026   0.99796    
+##                        Estimate Std. Error z-value Pr(&gt;|z|)    
+## (Intercept):Compute  -0.1786165  0.2450403 -0.7289  0.46605    
+## (Intercept):Data     -0.1712254  0.2362607 -0.7247  0.46862    
+## CompGPUs:Compute      0.0700762  0.0588313  1.1911  0.23360    
+## CompGPUs:Data         0.0690709  0.0593505  1.1638  0.24451    
+## IndustryTRUE:Compute  0.1624118  0.1863125  0.8717  0.38336    
+## IndustryTRUE:Data     0.1648773  0.1809062  0.9114  0.36209    
+## CV:Compute            0.2180065  0.1844113  1.1822  0.23714    
+## CV:Data               0.2134180  0.1808160  1.1803  0.23788    
+## Robotics:Compute     -0.4747765  0.2374068 -1.9998  0.04552 *  
+## Robotics:Data        -0.4701585  0.2436104 -1.9300  0.05361 .  
+## NLP:Compute          -0.0926717  0.1844714 -0.5024  0.61541    
+## NLP:Data             -0.0919440  0.1837973 -0.5002  0.61690    
+## RL:Compute           -0.0383403  0.2098834 -0.1827  0.85505    
+## RL:Data              -0.0381774  0.2089358 -0.1827  0.85502    
+## Other:Compute        -0.3424831  0.1949447 -1.7568  0.07895 .  
+## Other:Data           -0.3419271  0.1954926 -1.7491  0.08028 .  
+## Compute.Data          0.9940013  0.0585034 16.9905  &lt; 2e-16 ***
+## Data.Data             0.0019967  0.0194980  0.1024  0.91843    
 ## ---
 ## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
 ## 
-## Log-Likelihood: -271.5
-## McFadden R^2:  0.083525 
-## Likelihood ratio test : chisq = 49.488 (p.value = 2.7647e-05)</code></pre>
+## Log-Likelihood: -254.68
+## McFadden R^2:  0.086082 
+## Likelihood ratio test : chisq = 47.977 (p.value = 4.789e-05)</code></pre>
 </div>
 </div>
 
