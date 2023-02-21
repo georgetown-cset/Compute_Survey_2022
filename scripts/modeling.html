@@ -482,7 +482,9 @@ Contributions</h3>
   filter(Sector %in% c(&#39;Academia&#39;, &#39;Industry&#39;)) %&gt;%
   mutate(ContributionConcern = as.factor(ContributionConcern))
 
-concern.orderedmodel &lt;- polr(ContributionConcern ~ ., data = df, Hess = T)
+concern.orderedmodel &lt;- polr(ContributionConcern ~ . + 
+                               Sector:CV + Sector:NLP + Sector:Robotics + Sector:RL + Sector:Other, 
+                             data = df, Hess = T)
 
 output &lt;- coef(summary(concern.orderedmodel))
 p &lt;- pnorm(abs(output[, &#39;t value&#39;]), lower.tail = F) * 2
@@ -492,44 +494,56 @@ ci &lt;- rbind(confint(concern.orderedmodel), matrix(, nrow = 4, ncol = 2))</cod
 <pre class="r"><code>output &lt;- cbind(output, ci)
 
 output</code></pre>
-<pre><code>##                      Value Std. Error    t value      p value      2.5 %
-## SectorIndustry -0.57968438  0.2053086 -2.8234783 4.750564e-03 -0.9839450
-## CV              0.25033668  0.2106032  1.1886649 2.345715e-01 -0.1623148
-## NLP             0.59837257  0.2164098  2.7649975 5.692323e-03  0.1752179
-## Robotics       -1.13616425  0.2695986 -4.2142813 2.505748e-05 -1.6686151
-## RL              0.02552662  0.2418526  0.1055462 9.159424e-01 -0.4489549
-## Other          -0.71885578  0.2176343 -3.3030439 9.564143e-04 -1.1476026
-## 0|1            -1.79521545  0.2526408 -7.1058004 1.196272e-12         NA
-## 1|2            -0.77263918  0.2376836 -3.2507041 1.151196e-03         NA
-## 2|3             0.09613699  0.2351119  0.4088989 6.826139e-01         NA
-## 3|4             1.56947729  0.2531238  6.2004328 5.630811e-10         NA
-##                    97.5 %
-## SectorIndustry -0.1784620
-## CV              0.6640138
-## NLP             1.0243402
-## Robotics       -0.6103461
-## RL              0.5003296
-## Other          -0.2936768
-## 0|1                    NA
-## 1|2                    NA
-## 2|3                    NA
-## 3|4                    NA</code></pre>
+<pre><code>##                               Value Std. Error    t value      p value
+## SectorIndustry          -0.69556096  0.4900381 -1.4194019 1.557819e-01
+## CV                       0.28806210  0.2550783  1.1293085 2.587677e-01
+## NLP                      0.47300106  0.2655215  1.7814037 7.484653e-02
+## Robotics                -1.14027189  0.2995206 -3.8069894 1.406688e-04
+## RL                       0.18877166  0.2733259  0.6906469 4.897875e-01
+## Other                   -0.76771073  0.2641452 -2.9063965 3.656179e-03
+## SectorIndustry:CV       -0.04500265  0.4613565 -0.0975442 9.222942e-01
+## SectorIndustry:NLP       0.42011040  0.4538561  0.9256468 3.546296e-01
+## SectorIndustry:Robotics -0.26250726  0.7173659 -0.3659322 7.144157e-01
+## SectorIndustry:RL       -0.89532641  0.5957111 -1.5029541 1.328509e-01
+## SectorIndustry:Other     0.22372464  0.4659382  0.4801595 6.311140e-01
+## 0|1                     -1.81887483  0.2911257 -6.2477293 4.164625e-10
+## 1|2                     -0.78302429  0.2779563 -2.8170770 4.846291e-03
+## 2|3                      0.09251218  0.2756603  0.3356021 7.371710e-01
+## 3|4                      1.56691083  0.2904249  5.3952360 6.843356e-08
+##                               2.5 %     97.5 %
+## SectorIndustry          -1.65806464  0.2654891
+## CV                      -0.21150052  0.7897683
+## NLP                     -0.04705541  0.9952644
+## Robotics                -1.73150478 -0.5554371
+## RL                      -0.34662366  0.7265263
+## Other                   -1.28778541 -0.2508867
+## SectorIndustry:CV       -0.94966189  0.8612117
+## SectorIndustry:NLP      -0.46908091  1.3121198
+## SectorIndustry:Robotics -1.71804624  1.1244175
+## SectorIndustry:RL       -2.07894528  0.2689084
+## SectorIndustry:Other    -0.69085124  1.1380869
+## 0|1                              NA         NA
+## 1|2                              NA         NA
+## 2|3                              NA         NA
+## 3|4                              NA         NA</code></pre>
 </div>
 </div>
 <div id="model-4" class="section level2">
 <h2>Model 4</h2>
-<div id="subfield-and-gpu-utilization-effects-on-concern-about-future-contributions" class="section level3">
-<h3>Subfield and GPU Utilization Effects on Concern about Future
+<div id="sector-and-gpu-utilization-effects-on-concern-about-future-contributions" class="section level3">
+<h3>Sector and GPU Utilization Effects on Concern about Future
 Contributions</h3>
+<p>(Treating GPU Utilization as a CATEGORICAL variable)</p>
 <pre class="r"><code>df &lt;- full_data %&gt;%
-  filter(Sector == &#39;Academia&#39;) %&gt;%
-  dplyr::select(ContributionConcern, CV, NLP, Robotics, RL, Other, CompGPUs) %&gt;%
+  dplyr::select(ContributionConcern, Sector, CV, NLP, Robotics, RL, Other, CompGPUs) %&gt;%
   mutate_at(c(&#39;CV&#39;,&#39;NLP&#39;, &#39;Robotics&#39;, &#39;RL&#39;, &#39;Other&#39;), ~replace_na(., 0)) %&gt;%
   drop_na() %&gt;%
-  mutate(ContributionConcern = as.factor(ContributionConcern),
+  filter(Sector %in% c(&#39;Academia&#39;, &#39;Industry&#39;)) %&gt;%
+  mutate(ContributionConcern = as.factor(ContributionConcern), 
          CompGPUs = as.factor(CompGPUs))
 
-concern.gpus.model &lt;- polr(ContributionConcern ~ ., data = df, Hess = T)
+concern.gpus.model &lt;- polr(ContributionConcern ~ Sector + CompGPUs + Sector:CompGPUs, 
+                           data = df, Hess = T)
 
 output &lt;- coef(summary(concern.gpus.model))
 p &lt;- pnorm(abs(output[, &#39;t value&#39;]), lower.tail = F) * 2
@@ -539,121 +553,84 @@ ci &lt;- rbind(confint(concern.gpus.model), matrix(, nrow = 4, ncol = 2))</code>
 <pre class="r"><code>output &lt;- cbind(output, ci)
 
 output</code></pre>
-<pre><code>##                Value Std. Error    t value      p value       2.5 %     97.5 %
-## CV         0.5190565  0.3025820  1.7154242 8.626749e-02 -0.07255189  1.1155588
-## NLP        0.3512010  0.3060222  1.1476325 2.511203e-01 -0.24722647  0.9545862
-## Robotics  -0.9574123  0.3445316 -2.7788811 5.454649e-03 -1.63751349 -0.2845587
-## RL         0.2920860  0.3068633  0.9518441 3.411761e-01 -0.30872274  0.8964848
-## Other     -0.7203469  0.3048620 -2.3628625 1.813440e-02 -1.32138798 -0.1243712
-## CompGPUs1  0.6523096  0.5334578  1.2227950 2.214071e-01 -0.38831118  1.7110183
-## CompGPUs2  0.9409257  0.4973521  1.8918703 5.850827e-02 -0.02501704  1.9325410
-## CompGPUs3  0.8679860  0.4897013  1.7724804 7.631484e-02 -0.08378022  1.8438464
-## CompGPUs4  1.1120776  0.5324045  2.0887833 3.672724e-02  0.07692546  2.1711541
-## CompGPUs5  2.0290603  0.6339498  3.2006640 1.371113e-03  0.79973103  3.2952737
-## CompGPUs6  2.0582491  1.7579051  1.1708533 2.416577e-01 -1.14884628  5.7586412
-## 0|1       -0.9514183  0.5103116 -1.8643868 6.226740e-02          NA         NA
-## 1|2        0.1432897  0.5064164  0.2829484 7.772164e-01          NA         NA
-## 2|3        1.1073645  0.5105174  2.1691023 3.007492e-02          NA         NA
-## 3|4        2.6749846  0.5304576  5.0427868 4.588004e-07          NA         NA</code></pre>
+<pre><code>##                               Value Std. Error    t value      p value
+## SectorIndustry           -0.9842399  0.9258153 -1.0631061 2.877338e-01
+## CompGPUs1                 0.7620209  0.5165726  1.4751476 1.401729e-01
+## CompGPUs2                 1.3657715  0.4653948  2.9346513 3.339228e-03
+## CompGPUs3                 1.3814503  0.4524625  3.0531820 2.264286e-03
+## CompGPUs4                 1.7014108  0.4908815  3.4660318 5.282009e-04
+## CompGPUs5                 2.3047452  0.6107670  3.7735261 1.609564e-04
+## CompGPUs6                 2.6228264  1.4106905  1.8592500 6.299171e-02
+## SectorIndustry:CompGPUs1  0.6863849  1.2108119  0.5668798 5.707958e-01
+## SectorIndustry:CompGPUs2  0.1978614  1.0397742  0.1902927 8.490798e-01
+## SectorIndustry:CompGPUs3  1.8127271  1.0365882  1.7487437 8.033534e-02
+## SectorIndustry:CompGPUs4  0.1810917  1.1109305  0.1630090 8.705113e-01
+## SectorIndustry:CompGPUs5 -0.5382127  1.2041998 -0.4469463 6.549138e-01
+## SectorIndustry:CompGPUs6 -1.3137114  1.8451966 -0.7119628 4.764878e-01
+## 0|1                      -0.2543429  0.3947471 -0.6443186 5.193689e-01
+## 1|2                       0.7390126  0.3947503  1.8721014 6.119258e-02
+## 2|3                       1.5895579  0.4019114  3.9549961 7.653590e-05
+## 3|4                       3.0524246  0.4255870  7.1722694 7.376458e-13
+##                                2.5 %    97.5 %
+## SectorIndustry           -3.05329118 0.7328709
+## CompGPUs1                -0.24426147 1.7888922
+## CompGPUs2                 0.46482870 2.2975844
+## CompGPUs3                 0.50577899 2.2883250
+## CompGPUs4                 0.75058708 2.6824320
+## CompGPUs5                 1.12181978 3.5262448
+## CompGPUs6                -0.05334729 5.9182013
+## SectorIndustry:CompGPUs1 -1.65114186 3.1991806
+## SectorIndustry:CompGPUs2 -1.76139060 2.4393511
+## SectorIndustry:CompGPUs3 -0.13551073 4.0515458
+## SectorIndustry:CompGPUs4 -1.92465509 2.5382319
+## SectorIndustry:CompGPUs5 -2.84674823 1.9685687
+## SectorIndustry:CompGPUs6 -5.22187426 2.2909263
+## 0|1                               NA        NA
+## 1|2                               NA        NA
+## 2|3                               NA        NA
+## 3|4                               NA        NA</code></pre>
 </div>
 </div>
 <div id="model-5" class="section level2">
 <h2>Model 5</h2>
-<div id="gpu-utilization-impact-on-budget-priorities" class="section level3">
-<h3>GPU Utilization Impact on Budget Priorities</h3>
+<div id="sector-and-gpu-utilization-effects-on-concern-about-future-contributions-1" class="section level3">
+<h3>Sector and GPU Utilization Effects on Concern about Future
+Contributions</h3>
+<p>(Treating GPU Utilization as a LINEAR variable)</p>
 <pre class="r"><code>df &lt;- full_data %&gt;%
-  filter(PrioritySimplified != &#39;&#39;, CompGPUs != &#39;&#39;) %&gt;%
-  mutate(Priority = as.factor(PrioritySimplified)) %&gt;%
-  dplyr::select(Priority, CompGPUs) %&gt;%
-  dfidx(choice = &#39;Priority&#39;, shape = &#39;wide&#39;)
+  dplyr::select(ContributionConcern, Sector, CV, NLP, Robotics, RL, Other, CompGPUs) %&gt;%
+  mutate_at(c(&#39;CV&#39;,&#39;NLP&#39;, &#39;Robotics&#39;, &#39;RL&#39;, &#39;Other&#39;), ~replace_na(., 0)) %&gt;%
+  drop_na() %&gt;%
+  filter(Sector %in% c(&#39;Academia&#39;, &#39;Industry&#39;)) %&gt;%
+  mutate(ContributionConcern = as.factor(ContributionConcern))
 
-gpu.probit &lt;- mlogit(Priority ~ 1 | CompGPUs, data = df, reflevel = &#39;Talent&#39;, alt.subset = c(&#39;Compute&#39;, &#39;Talent&#39;, &#39;Data&#39;), probit = T)
-summary(gpu.probit)</code></pre>
-<pre><code>## 
-## Call:
-## mlogit(formula = Priority ~ 1 | CompGPUs, data = df, alt.subset = c(&quot;Compute&quot;, 
-##     &quot;Talent&quot;, &quot;Data&quot;), reflevel = &quot;Talent&quot;, probit = T)
-## 
-## Frequencies of alternatives:choice
-##  Talent Compute    Data 
-## 0.54305 0.23510 0.22185 
-## 
-## bfgs method
-## 27 iterations, 0h:0m:9s 
-## g&#39;(-H)^-1g = 0.148 
-## last step couldn&#39;t find higher value 
-## 
-## Coefficients :
-##                       Estimate Std. Error z-value Pr(&gt;|z|)
-## (Intercept):Compute -0.3579327  0.3178423 -1.1261   0.2601
-## (Intercept):Data    -0.7505241  2.1596456 -0.3475   0.7282
-## CompGPUs:Compute     0.0836867  0.0742929  1.1264   0.2600
-## CompGPUs:Data        0.0064324  0.3084312  0.0209   0.9834
-## Compute.Data         1.6974676  3.2646107  0.5200   0.6031
-## Data.Data            0.4994202  2.3703042  0.2107   0.8331
-## 
-## Log-Likelihood: -300.58
-## McFadden R^2:  0.010607 
-## Likelihood ratio test : chisq = 6.4449 (p.value = 0.1683)</code></pre>
-</div>
-</div>
-<div id="model-6" class="section level2">
-<h2>Model 6</h2>
-<div id="gpu-utilization-sector-and-subfield-impact-on-budget-priorities" class="section level3">
-<h3>GPU Utilization, Sector, and Subfield Impact on Budget
-Priorities</h3>
-<pre class="r"><code>df &lt;- full_data %&gt;%
-  filter(PrioritySimplified != &#39;&#39;, CompGPUs != &#39;&#39;, Sector %in% c(&#39;Industry&#39;, &#39;Academia&#39;), 
-         CV | Robotics | NLP | RL | Other &gt; 0) %&gt;%
-  mutate(Priority = as.factor(PrioritySimplified), 
-         Industry = .$Sector == &#39;Industry&#39;) %&gt;%
-  dplyr::select(Priority, CompGPUs, Industry, CV, Robotics, NLP, RL, Other) %&gt;%
-  dfidx(choice = &#39;Priority&#39;, shape = &#39;wide&#39;)
+concern.gpus.model &lt;- polr(ContributionConcern ~ Sector + CompGPUs + Sector:CompGPUs, 
+                           data = df, Hess = T)
 
-full.probit &lt;- mlogit(Priority ~ 1 | CompGPUs + Industry + CV + Robotics + NLP + RL + Other, 
-                      data = df, reflevel = &#39;Talent&#39;, alt.subset = c(&#39;Compute&#39;, &#39;Talent&#39;, &#39;Data&#39;), probit = T)
-summary(full.probit)</code></pre>
-<pre><code>## 
-## Call:
-## mlogit(formula = Priority ~ 1 | CompGPUs + Industry + CV + Robotics + 
-##     NLP + RL + Other, data = df, alt.subset = c(&quot;Compute&quot;, &quot;Talent&quot;, 
-##     &quot;Data&quot;), reflevel = &quot;Talent&quot;, probit = T)
-## 
-## Frequencies of alternatives:choice
-##  Talent Compute    Data 
-## 0.54676 0.23741 0.21583 
-## 
-## bfgs method
-## 71 iterations, 0h:0m:22s 
-## g&#39;(-H)^-1g = 6.72E-07 
-## gradient close to zero 
-## 
-## Coefficients :
-##                        Estimate Std. Error z-value Pr(&gt;|z|)    
-## (Intercept):Compute  -0.1786165  0.2450403 -0.7289  0.46605    
-## (Intercept):Data     -0.1712254  0.2362607 -0.7247  0.46862    
-## CompGPUs:Compute      0.0700762  0.0588313  1.1911  0.23360    
-## CompGPUs:Data         0.0690709  0.0593505  1.1638  0.24451    
-## IndustryTRUE:Compute  0.1624118  0.1863125  0.8717  0.38336    
-## IndustryTRUE:Data     0.1648773  0.1809062  0.9114  0.36209    
-## CV:Compute            0.2180065  0.1844113  1.1822  0.23714    
-## CV:Data               0.2134180  0.1808160  1.1803  0.23788    
-## Robotics:Compute     -0.4747765  0.2374068 -1.9998  0.04552 *  
-## Robotics:Data        -0.4701585  0.2436104 -1.9300  0.05361 .  
-## NLP:Compute          -0.0926717  0.1844714 -0.5024  0.61541    
-## NLP:Data             -0.0919440  0.1837973 -0.5002  0.61690    
-## RL:Compute           -0.0383403  0.2098834 -0.1827  0.85505    
-## RL:Data              -0.0381774  0.2089358 -0.1827  0.85502    
-## Other:Compute        -0.3424831  0.1949447 -1.7568  0.07895 .  
-## Other:Data           -0.3419271  0.1954926 -1.7491  0.08028 .  
-## Compute.Data          0.9940013  0.0585034 16.9905  &lt; 2e-16 ***
-## Data.Data             0.0019967  0.0194980  0.1024  0.91843    
-## ---
-## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
-## 
-## Log-Likelihood: -254.68
-## McFadden R^2:  0.086082 
-## Likelihood ratio test : chisq = 47.977 (p.value = 4.789e-05)</code></pre>
+output &lt;- coef(summary(concern.gpus.model))
+p &lt;- pnorm(abs(output[, &#39;t value&#39;]), lower.tail = F) * 2
+output &lt;- cbind(output, &quot;p value&quot; = p)
+ci &lt;- rbind(confint(concern.gpus.model), matrix(, nrow = 4, ncol = 2))</code></pre>
+<pre><code>## Waiting for profiling to be done...</code></pre>
+<pre class="r"><code>output &lt;- cbind(output, ci)
+
+output</code></pre>
+<pre><code>##                               Value Std. Error    t value      p value
+## SectorIndustry           0.05967641 0.50193577  0.1188925 9.053605e-01
+## CompGPUs                 0.37111179 0.08745472  4.2434738 2.200861e-05
+## SectorIndustry:CompGPUs -0.18498948 0.15972169 -1.1581989 2.467829e-01
+## 0|1                     -0.54010067 0.25956424 -2.0807977 3.745243e-02
+## 1|2                      0.40621240 0.25461466  1.5954007 1.106227e-01
+## 2|3                      1.22820377 0.26350876  4.6609599 3.147380e-06
+## 3|4                      2.66195442 0.29822417  8.9260184 4.416171e-19
+##                              2.5 %    97.5 %
+## SectorIndustry          -0.9276924 1.0465057
+## CompGPUs                 0.2010013 0.5443986
+## SectorIndustry:CompGPUs -0.4980132 0.1297806
+## 0|1                             NA        NA
+## 1|2                             NA        NA
+## 2|3                             NA        NA
+## 3|4                             NA        NA</code></pre>
 </div>
 </div>
 

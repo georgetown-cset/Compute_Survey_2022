@@ -75,7 +75,9 @@ df <- full_data %>%
   filter(Sector %in% c('Academia', 'Industry')) %>%
   mutate(ContributionConcern = as.factor(ContributionConcern))
 
-concern.orderedmodel <- polr(ContributionConcern ~ ., data = df, Hess = T)
+concern.orderedmodel <- polr(ContributionConcern ~ . + 
+                               Sector:CV + Sector:NLP + Sector:Robotics + Sector:RL + Sector:Other, 
+                             data = df, Hess = T)
 
 output <- coef(summary(concern.orderedmodel))
 p <- pnorm(abs(output[, 't value']), lower.tail = F) * 2
@@ -86,19 +88,21 @@ output <- cbind(output, ci)
 output
 ```
 
-## Model 4
-### Subfield and GPU Utilization Effects on Concern about Future Contributions 
+## Model 4 
+### Sector and GPU Utilization Effects on Concern about Future Contributions
+(Treating GPU Utilization as a CATEGORICAL variable)
 
 ```{r}
 df <- full_data %>%
-  filter(Sector == 'Academia') %>%
-  dplyr::select(ContributionConcern, CV, NLP, Robotics, RL, Other, CompGPUs) %>%
+  dplyr::select(ContributionConcern, Sector, CV, NLP, Robotics, RL, Other, CompGPUs) %>%
   mutate_at(c('CV','NLP', 'Robotics', 'RL', 'Other'), ~replace_na(., 0)) %>%
   drop_na() %>%
-  mutate(ContributionConcern = as.factor(ContributionConcern),
+  filter(Sector %in% c('Academia', 'Industry')) %>%
+  mutate(ContributionConcern = as.factor(ContributionConcern), 
          CompGPUs = as.factor(CompGPUs))
 
-concern.gpus.model <- polr(ContributionConcern ~ ., data = df, Hess = T)
+concern.gpus.model <- polr(ContributionConcern ~ Sector + CompGPUs + Sector:CompGPUs, 
+                           data = df, Hess = T)
 
 output <- coef(summary(concern.gpus.model))
 p <- pnorm(abs(output[, 't value']), lower.tail = F) * 2
@@ -110,33 +114,26 @@ output
 ```
 
 ## Model 5
-### GPU Utilization Impact on Budget Priorities
+### Sector and GPU Utilization Effects on Concern about Future Contributions
+(Treating GPU Utilization as a LINEAR variable)
 
 ```{r}
 df <- full_data %>%
-  filter(PrioritySimplified != '', CompGPUs != '') %>%
-  mutate(Priority = as.factor(PrioritySimplified)) %>%
-  dplyr::select(Priority, CompGPUs) %>%
-  dfidx(choice = 'Priority', shape = 'wide')
+  dplyr::select(ContributionConcern, Sector, CV, NLP, Robotics, RL, Other, CompGPUs) %>%
+  mutate_at(c('CV','NLP', 'Robotics', 'RL', 'Other'), ~replace_na(., 0)) %>%
+  drop_na() %>%
+  filter(Sector %in% c('Academia', 'Industry')) %>%
+  mutate(ContributionConcern = as.factor(ContributionConcern))
 
-gpu.probit <- mlogit(Priority ~ 1 | CompGPUs, data = df, reflevel = 'Talent', alt.subset = c('Compute', 'Talent', 'Data'), probit = T)
-summary(gpu.probit)
-```
+concern.gpus.model <- polr(ContributionConcern ~ Sector + CompGPUs + Sector:CompGPUs, 
+                           data = df, Hess = T)
 
-## Model 6
-### GPU Utilization, Sector, and Subfield Impact on Budget Priorities
+output <- coef(summary(concern.gpus.model))
+p <- pnorm(abs(output[, 't value']), lower.tail = F) * 2
+output <- cbind(output, "p value" = p)
+ci <- rbind(confint(concern.gpus.model), matrix(, nrow = 4, ncol = 2))
+output <- cbind(output, ci)
 
-```{r}
-df <- full_data %>%
-  filter(PrioritySimplified != '', CompGPUs != '', Sector %in% c('Industry', 'Academia'), 
-         CV | Robotics | NLP | RL | Other > 0) %>%
-  mutate(Priority = as.factor(PrioritySimplified), 
-         Industry = .$Sector == 'Industry') %>%
-  dplyr::select(Priority, CompGPUs, Industry, CV, Robotics, NLP, RL, Other) %>%
-  dfidx(choice = 'Priority', shape = 'wide')
-
-full.probit <- mlogit(Priority ~ 1 | CompGPUs + Industry + CV + Robotics + NLP + RL + Other, 
-                      data = df, reflevel = 'Talent', alt.subset = c('Compute', 'Talent', 'Data'), probit = T)
-summary(full.probit)
+output
 ```
 
