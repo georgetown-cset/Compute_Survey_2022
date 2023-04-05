@@ -1,8 +1,12 @@
 # Interpreting Data Results
 
+### `fake_data.csv`
+
+The file `fake_data.csv` contains 30 rows of randomly shuffled data, which is included in this repository so that the reader can visualize the data structure and layout of the primary data file after preprocessing. This is meant to provide an aid to the reader who is interested in working through the analysis presented in `codebook.ipynb`, but it is important to emphasize that to generate this file, 30 answers were randomly selected from each column at random. This in effect destroys the relationships between the columns (e.g. some questions may not have been asked to people who provided specific answers at earlier stages, but this is not taken account of in the random generation process). The secondary purpose of including this fake data is for the reader to visually assess the rough proportion of null values in different columns (where a cell may be null because a respondent only partially completed the survey, skipped the relevant question, or was not presented the relevant question due to a previous response). 
+
 ### Field Names
 
-This README file explains the meaning of each column in the final data file produced by the pre-processing steps at the start of `codebook.ipynb`, of which there are 125. Fifty-five of these columns are binary variables that indicate whether a respondent identified as a researcher working in different fields or subfields within AI. These fields are as follows (names are Pascal Case versions of the exact text shown to respondents):
+This README file explains the meaning of each column in the primary data file produced by the preprocessing steps at the start of `codebook.ipynb`, of which there are 125. Fifty-five of these columns are binary variables that indicate whether a respondent identified as a researcher working in different fields or subfields within AI. These fields are as follows (names are Pascal Case versions of the exact text shown to respondents):
 
 ```
 CV [Computer Vision]
@@ -72,7 +76,7 @@ It is important to emphasize that, for all subfields, respondents were **only** 
 The columns used in the final data file and their meanings are as follows:
 
 ```
-DistributionChannel       <- 'email' or 'anonymous'; whether the respondent was reached by a targeted email or via snowball sampling
+DistributionChannel       <- 'email' or 'anonymous'; whether the respondent was reached by a targeted email or via snowball sampling—not present in `fake_data.csv`
 Screener                  <- Numerical ordinal [0,3]; how much time respondent spends working on AI systems (see INSTRUMENT.pdf for meanings)
 Tenure                    <- Numerical ordinal [0,2]: how long respondent has worked in AI (see INSTRUMENT.pdf for meanings)
 TimeManaging              <- Numerical ordinal [0,3]: what percent of respondent's time is spent managing compute resources (see INSTRUMENT.pdf for meanings; blank if skipped)

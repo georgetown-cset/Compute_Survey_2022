@@ -18,6 +18,7 @@ This repository is organized as follows:
 .                                   <- Project root
 ├── data                            <- Additional details regarding the data structure and demographics of our respondents with respect to research subfields
 |   ├── README.md                   <- Documentation explaining the meaning of each column in the final, cleaned data file
+|   ├── fake_data.csv               <- A randomly shuffled subset of the primary data file, included to help the reader understand the data structure
 |   └── field_composition.csv       <- CSV file showing the number of industry, academic, and government respondents in each field and subfield
 ├── scripts                         <- Folder containing all associated code
 |   ├── targeting                   <- SQL scripts used to identify potential respondents
