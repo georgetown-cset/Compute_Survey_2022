@@ -1,6 +1,6 @@
-# 💽 CSET-HAI 2022 Compute Survey Repository
+# 💽 CSET 2022 Compute Survey Repository
 
-This repository includes all associated materials for the compute survey run by CSET and HAI in June and July of 2022. Specifically, this repository hosts:
+This repository includes all associated materials for the compute survey run by CSET in June and July of 2022. Specifically, this repository hosts:
 
 1. 🙋 SQL scripts used for identifying potential respondents in the population of interest;
 2. ❓ The survey instrument; and
@@ -9,6 +9,8 @@ This repository includes all associated materials for the compute survey run by 
 ### Using This Repository
 
 We are **not** releasing raw data associated with survey responses, due to IRB restrictions associated with this survey project. As a result, this repository primarily functions 1) to offer transparency regarding the analysis methods employed in this research and 2) to provide additional analytical results not included in our final paper.
+
+Note that in addition to the responses collected via the sampling method described in our report, we collected 47 additional responses via distribution to networks. These responses were not included in the analysis presented, but all of the paper's core figures are reproduced in the folder `results/supplemental_figures/with_snowball`, and in no cases do our core results change. 
 
 ### Organization
 
