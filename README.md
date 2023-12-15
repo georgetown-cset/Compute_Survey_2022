@@ -6,6 +6,13 @@ This repository includes all associated materials for the compute survey run by 
 2. ❓ The survey instrument; and
 3. 📊 Analytical scripts (in Python and R) for cleaning, visualizing, and analyzing survey responses.
 
+The survey resulted in:
+
+1. A 2023 CSET [report](https://cset.georgetown.edu/publication/the-main-resource-is-the-human/) by Micah Musser, Rebecca Gelles, Veronica Kinoshita, Catherine Aiken, and Andrew Lohn; and
+2. A conference paper at AAAI-24 by Rebecca Gelles, Veronica Kinoshita, Micah Musser, and James Dunham.
+
+The online appendix for the conference paper can be found [here](AAAI-24-Appendix.pdf).
+
 ### Using This Repository
 
 We are **not** releasing raw data associated with survey responses, due to IRB restrictions associated with this survey project. As a result, this repository primarily functions 1) to offer transparency regarding the analysis methods employed in this research and 2) to provide additional analytical results not included in our final paper.
